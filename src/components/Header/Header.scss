@@ -1,0 +1,25 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f0f2f5;
+  
+    &__email {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  
+    &__logout {
+      background-color: #ff4d4f;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+  
+      &:hover {
+        background-color: #d9363e;
+      }
+    }
+  }
+  
