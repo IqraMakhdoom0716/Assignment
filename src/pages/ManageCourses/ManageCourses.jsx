@@ -1,43 +1,52 @@
-import React, { useState } from 'react';
-import { Modal } from 'antd';
-import Header from '../../components/Header/Header';
-import CourseTable from '../../components/CourseTable/CourseTable';
-import DynamicForm from '../../components/Form/Form';
-import './ManageCourses.scss';
+import React, { useState, useEffect } from "react";
+import { Modal, Button } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { addCourse, setCourses } from "../../redux/slices/coursesSlice";
+import Header from "../../components/Header/Header";
+import CourseTable from "../../components/CourseTable/CourseTable";
+import DynamicForm from "../../components/Form/Form";
+import "./ManageCourses.scss";
 
 const ManageCourses = () => {
-  const [courses, setCourses] = useState([
-    { id: 1, title: 'Math 101', author: 'John Doe', description: 'Basic Math Course' },
-    { id: 2, title: 'Science 202', author: 'Jane Smith', description: 'Intermediate Science Course' },
-  ]);
+  const dispatch = useDispatch();
+  const courses = useSelector((state) => state.courses);
+  const authors = useSelector((state) => state.authors);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [courseToDelete, setCourseToDelete] = useState(null);
+  useEffect(() => {
+    const storedCourses = localStorage.getItem("courses");
+    if (storedCourses) {
+      dispatch(setCourses(JSON.parse(storedCourses)));
+    }
+  }, [dispatch]);
 
-  const handleDelete = (course) => {
-    setCourseToDelete(course);
-    setDeleteModalVisible(true);
-  };
+  useEffect(() => {
+    if (courses.length > 0) {
+      localStorage.setItem("courses", JSON.stringify(courses));
+    }
+  }, [courses]);
 
-  const confirmDelete = () => {
-    setCourses((prevCourses) => prevCourses.filter((c) => c.id !== courseToDelete.id));
-    setDeleteModalVisible(false);
+  const handleAddCourse = (values) => {
+    const newCourse = { id: Date.now(), ...values };
+    dispatch(addCourse(newCourse));
+    setIsModalVisible(false);
   };
 
   return (
     <div className="manage-courses">
       <Header />
       <h1>Course Management</h1>
-      <CourseTable courses={courses} onDelete={handleDelete} />
-      
-      {/* Delete Confirmation Modal */}
+      <Button type="primary" onClick={() => setIsModalVisible(true)}>
+        Add Course
+      </Button>
+      <CourseTable />
       <Modal
-        title="Confirm Delete"
-        visible={deleteModalVisible}
-        onOk={confirmDelete}
-        onCancel={() => setDeleteModalVisible(false)}
+        title="Add Course"
+        open={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
       >
-        Are you sure you want to delete {courseToDelete?.title}?
+        <DynamicForm type="course" authors={authors} onSubmit={handleAddCourse} />
       </Modal>
     </div>
   );

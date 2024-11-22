@@ -14,13 +14,12 @@ const LoginPage = () => {
     setLoading(true);
     const { email, password } = values;
 
-    // Simulated API call
     setTimeout(() => {
-      if (email === 'teacher@example.com' && password === 'password') {
+      if (email === 'courses@management.com' && password === 'password') {
         dispatch(login({ email, role: 'teacher' }));
         message.success('Login successful as Teacher!');
         navigate('/manage-courses');
-      } else if (email === 'admin@example.com' && password === 'password') {
+      } else if (email === 'author@management.com' && password === 'password') {
         dispatch(login({ email, role: 'admin' }));
         message.success('Login successful as Admin!');
         navigate('/manage-authors');

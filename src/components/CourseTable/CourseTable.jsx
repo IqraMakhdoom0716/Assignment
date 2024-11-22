@@ -1,13 +1,21 @@
 import React from 'react';
-import { Table, Button, Modal } from 'antd';
+import { Table, Button } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteCourse } from '../../redux/slices/coursesSlice';
 import { useNavigate } from 'react-router-dom';
 import './CourseTable.scss';
 
-const CourseTable = ({ courses, onDelete }) => {
+const CourseTable = () => {
+  const courses = useSelector((state) => state.courses); 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleEdit = (id) => {
-    navigate(`/manage-courses/${id}`);
+   const handleEdit = (id) => {
+     navigate(`/manage-courses/${id}`); 
+   };
+
+  const handleDelete = (id) => {
+    dispatch(deleteCourse(id)); 
   };
 
   const columns = [
@@ -19,21 +27,17 @@ const CourseTable = ({ courses, onDelete }) => {
       key: 'actions',
       render: (_, record) => (
         <>
-          <Button onClick={() => handleEdit(record.id)}>Edit</Button>
-          <Button danger onClick={() => onDelete(record)}>Delete</Button>
+          <Button 
+            onClick={() => handleEdit(record.id)}
+          > Edit
+          </Button>
+          <Button danger onClick={() => handleDelete(record.id)}>Delete</Button>
         </>
       ),
     },
   ];
 
-  return (
-    <Table
-      dataSource={courses}
-      columns={columns}
-      rowKey="id"
-      className="course-table"
-    />
-  );
+  return <Table dataSource={courses} columns={columns} rowKey="id" />;
 };
 
 export default CourseTable;

@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Button, Select } from 'antd';
-import './Form.scss'
+import './Form.scss';
+
 const { Option } = Select;
 
-const DynamicForm = ({ type, initialValues, authors, onSubmit }) => {
+const DynamicForm = ({ type, initialValues, authors = [], onSubmit }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -12,7 +13,6 @@ const DynamicForm = ({ type, initialValues, authors, onSubmit }) => {
     }
   }, [initialValues, form]);
 
-  // Define form fields based on the type (courses or authors)
   const getFields = () => {
     if (type === 'course') {
       return [
@@ -24,11 +24,11 @@ const DynamicForm = ({ type, initialValues, authors, onSubmit }) => {
         },
         {
           label: 'Author Name',
-          name: 'author',
-          type: 'select',
+          name: 'author', 
+          type: 'select', 
           options: authors.map((author) => ({
             label: author.name,
-            value: author.id,
+            value: author.id, 
           })),
           rules: [{ required: true, message: 'Please select an author' }],
         },
@@ -66,7 +66,7 @@ const DynamicForm = ({ type, initialValues, authors, onSubmit }) => {
           {type === 'text' && <Input />}
           {type === 'textarea' && <Input.TextArea />}
           {type === 'select' && (
-            <Select>
+            <Select placeholder="Select an author">
               {options.map((option) => (
                 <Option key={option.value} value={option.value}>
                   {option.label}
