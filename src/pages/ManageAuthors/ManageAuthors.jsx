@@ -34,26 +34,22 @@ const ManageAuthors = () => {
     });
   };
 
-  // Edit author logic
   const handleEditClick = (author) => {
     setEditingAuthor(author);
     form.setFieldsValue(author);
     setIsModalVisible(true);
   };
 
-  // Delete author logic
   const handleDelete = (record) => {
     const updatedAuthors = authors.filter((author) => author.id !== record.id);
     dispatch(setAuthors(updatedAuthors));
   };
 
-  // Logout logic
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
   };
 
-  // Table columns
   const columns = [
     { title: "Name", dataIndex: "name", key: "name" },
     {

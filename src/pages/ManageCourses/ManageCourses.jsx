@@ -19,7 +19,6 @@ const ManageCourses = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
-  // Load courses from local storage
   useEffect(() => {
     const storedCourses = localStorage.getItem("courses");
     if (storedCourses) {
@@ -27,7 +26,6 @@ const ManageCourses = () => {
     }
   }, [dispatch]);
 
-  // Save courses to local storage
   useEffect(() => {
     if (courses.length > 0) {
       localStorage.setItem("courses", JSON.stringify(courses));
@@ -47,7 +45,6 @@ const ManageCourses = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      {/* Sidebar */}
       <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
         <div className="logo">
           <h1 style={{ color: "white", textAlign: "center", padding: "10px 0" }}>
@@ -61,7 +58,6 @@ const ManageCourses = () => {
         </Menu>
       </Sider>
 
-      {/* Main Content */}
       <Layout>
         <Header
           style={{
