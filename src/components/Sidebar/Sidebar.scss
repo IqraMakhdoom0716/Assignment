@@ -1,0 +1,31 @@
+.custom-sidebar {
+    height: 100vh;
+    background: #f0f2f5; // Light theme background
+  
+    .sidebar-header {
+      padding: 16px;
+      text-align: center;
+      background: #fff;
+      border-bottom: 1px solid #d9d9d9;
+  
+      h2 {
+        margin: 0 0 8px 0;
+        font-size: 16px;
+        color: #333;
+        word-wrap: break-word;
+      }
+  
+      button {
+        margin-top: 8px;
+      }
+    }
+  
+    .ant-menu-item {
+      font-size: 16px;
+  
+      &:hover {
+        background: #e6f7ff;
+      }
+    }
+  }
+  

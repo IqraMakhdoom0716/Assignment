@@ -13,18 +13,18 @@ const LoginPage = () => {
   const handleLogin = async (values) => {
     setLoading(true);
     const { email, password } = values;
-
+  
     setTimeout(() => {
-      if (email === 'courses@management.com' && password === 'password') {
-        dispatch(login({ email, role: 'teacher' }));
-        message.success('Login successful as Teacher!');
-        navigate('/manage-courses');
-      } else if (email === 'author@management.com' && password === 'password') {
-        dispatch(login({ email, role: 'admin' }));
-        message.success('Login successful as Admin!');
-        navigate('/manage-authors');
+      if (email === "courses@management.com" && password === "password") {
+        dispatch(login({ email, role: "teacher" })); // Teacher role
+        message.success("Login successful as Teacher!");
+        navigate("/manage-courses");
+      } else if (email === "author@management.com" && password === "password") {
+        dispatch(login({ email, role: "admin" })); // Admin role
+        message.success("Login successful as Admin!");
+        navigate("/manage-authors");
       } else {
-        message.error('Invalid credentials');
+        message.error("Invalid credentials");
       }
       setLoading(false);
     }, 1000);

@@ -1,3 +1,19 @@
+.manage-authors-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  button {
+    flex-shrink: 0;
+  }
+}
 .author-table {
   .ant-table {
     background-color: #fff;
@@ -6,4 +22,8 @@
   .ant-btn {
     margin-right: 10px;
   }
+  
 }
+
+
+
