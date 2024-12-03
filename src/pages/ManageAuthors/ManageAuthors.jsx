@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button, Form, Input, Table, Layout, Menu } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addAuthor, setAuthors } from "../../redux/slices/authorsSlice";
+import { addAuthorAsync, setAuthors, updateAuthor } from "../../redux/slices/authorsSlice";
 import { logout } from "../../redux/slices/userSlice";
 import "./ManageAuthors.scss";
 
@@ -21,13 +21,11 @@ const ManageAuthors = () => {
   const handleFormSubmit = () => {
     form.validateFields().then((values) => {
       if (editingAuthor) {
-        const updatedAuthors = authors.map((author) =>
-          author.id === editingAuthor.id ? { ...author, ...values } : author
-        );
-        dispatch(setAuthors(updatedAuthors));
+        const updatedAuthor = { ...editingAuthor, ...values };
+        dispatch(updateAuthor(updatedAuthor));
       } else {
         const newAuthor = { id: Date.now(), ...values };
-        dispatch(addAuthor(newAuthor)); 
+        dispatch(addAuthorAsync(newAuthor));
       }
       setIsModalVisible(false);
       form.resetFields();
@@ -68,6 +66,19 @@ const ManageAuthors = () => {
     },
   ];
 
+  const menuItems = [
+    {
+      key: "1",
+      label: "Author Management",
+      onClick: () => navigate("/manage-authors"),
+    },
+    {
+      key: "2",
+      label: "Course Management",
+      onClick: () => navigate("/manage-courses"),
+    },
+  ];
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
@@ -76,14 +87,7 @@ const ManageAuthors = () => {
             {collapsed ? "PM" : "Project Manager"}
           </h1>
         </div>
-        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-          <Menu.Item key="1" onClick={() => navigate("/manage-authors")}>
-            Author Management
-          </Menu.Item>
-          <Menu.Item key="2" onClick={() => navigate("/manage-courses")}>
-            Course Management
-          </Menu.Item>
-        </Menu>
+        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" items={menuItems} />
       </Sider>
 
       <Layout>

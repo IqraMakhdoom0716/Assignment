@@ -1,4 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+export const addCourseAsync = createAsyncThunk(
+  'courses/addCourseAsync',
+  async (course) => {
+    const response = await fetch('http://localhost:3000/api/courses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(course),
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  }
+);
 
 const coursesSlice = createSlice({
   name: 'courses',
@@ -15,6 +32,11 @@ const coursesSlice = createSlice({
     deleteCourse: (state, action) => {
       return state.filter((c) => c.id !== action.payload);
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(addCourseAsync.fulfilled, (state, action) => {
+      state.push(action.payload);
+    });
   },
 });
 

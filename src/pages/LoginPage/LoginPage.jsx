@@ -1,39 +1,33 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { Form, Input, Button, message } from 'antd';
-import { login } from '../../redux/slices/userSlice';
-import './LoginPage.scss';
+import React, { useState } from "react";
+import { Form, Input, Button, message } from "antd";
+import { useLoginMutation } from "../../redux/slices/userApiSlice";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/slices/userSlice";
+import { useNavigate } from "react-router-dom";
+import "./LoginPage.scss";
 
 const LoginPage = () => {
-  const [loading, setLoading] = useState(false);
+  const [loginUser, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async (values) => {
-    setLoading(true);
     const { email, password } = values;
-  
-    setTimeout(() => {
-      if (email === "courses@management.com" && password === "password") {
-        dispatch(login({ email, role: "teacher" })); // Teacher role
-        message.success("Login successful as Teacher!");
-        navigate("/manage-courses");
-      } else if (email === "author@management.com" && password === "password") {
-        dispatch(login({ email, role: "admin" })); // Admin role
-        message.success("Login successful as Admin!");
-        navigate("/manage-authors");
-      } else {
-        message.error("Invalid credentials");
-      }
-      setLoading(false);
-    }, 1000);
+
+    try {
+      const user = await loginUser({ email, password }).unwrap(); 
+      dispatch(login(user));
+      message.success(`Login successful as ${user.role}!`);
+      navigate(user.role === "admin" ? "/manage-authors" : "/manage-courses");
+    } catch (error) {
+      message.error(error.message || "Invalid credentials");
+    }
   };
 
   return (
     <div className="login-page">
       <h1>Login</h1>
-      <Form 
+      <Form
         className="login-form"
         onFinish={handleLogin}
         layout="vertical"
@@ -41,24 +35,19 @@ const LoginPage = () => {
         <Form.Item
           label="Email"
           name="email"
-          rules={[{ required: true, message: 'Please input your email!' }]}
+          rules={[{ required: true, message: "Please input your email!" }]}
         >
           <Input type="email" placeholder="Enter your email" />
         </Form.Item>
         <Form.Item
           label="Password"
           name="password"
-          rules={[{ required: true, message: 'Please input your password!' }]}
+          rules={[{ required: true, message: "Please input your password!" }]}
         >
           <Input.Password placeholder="Enter your password" />
         </Form.Item>
         <Form.Item>
-          <Button 
-            type="primary" 
-            htmlType="submit" 
-            loading={loading}
-            block
-          >
+          <Button type="primary" htmlType="submit" loading={isLoading} block>
             Login
           </Button>
         </Form.Item>

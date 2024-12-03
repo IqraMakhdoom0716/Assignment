@@ -6,7 +6,7 @@ import coursesReducer from './slices/coursesSlice';
 import authorsReducer from './slices/authorsSlice';
 
 const persistConfig = {
-  key: 'root', 
+  key: 'root',
   storage,
 };
 
@@ -19,13 +19,11 @@ const rootReducer = combineReducers({
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: persistedReducer, 
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false, 
+      serializableCheck: false,
     }),
 });
 
 export const persistor = persistStore(store);
-
-export default store;

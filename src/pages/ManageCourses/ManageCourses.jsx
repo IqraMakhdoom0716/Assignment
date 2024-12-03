@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Layout, Menu } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addCourse, setCourses } from "../../redux/slices/coursesSlice";
+import { addCourse, setCourses, addCourseAsync } from "../../redux/slices/coursesSlice";
 import { logout } from "../../redux/slices/userSlice";
 import CourseTable from "../../components/CourseTable/CourseTable";
 import DynamicForm from "../../components/Form/Form";
@@ -34,7 +34,7 @@ const ManageCourses = () => {
 
   const handleAddCourse = (values) => {
     const newCourse = { id: Date.now(), ...values };
-    dispatch(addCourse(newCourse));
+    dispatch(addCourseAsync(newCourse));
     setIsModalVisible(false);
   };
 
@@ -42,6 +42,14 @@ const ManageCourses = () => {
     dispatch(logout());
     navigate("/login");
   };
+
+  const menuItems = [
+    {
+      key: "1",
+      label: "Courses",
+      onClick: () => navigate("/manage-courses"),
+    },
+  ];
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -51,11 +59,7 @@ const ManageCourses = () => {
             {collapsed ? "CM" : "Course Manager"}
           </h1>
         </div>
-        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-          <Menu.Item key="1" onClick={() => navigate("/manage-courses")}>
-            Courses
-          </Menu.Item>
-        </Menu>
+        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" items={menuItems} />
       </Sider>
 
       <Layout>
